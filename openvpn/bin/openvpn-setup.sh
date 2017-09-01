@@ -33,18 +33,6 @@ else
 	OPENVPN_CONFIG=$vpn_provider_configs/default.ovpn
 fi
 
-# add OpenVPN user/pass
-if [ "${OPENVPN_USERNAME}" = "**None**" ] || [ "${OPENVPN_PASSWORD}" = "**None**" ] ; then
- echo "OpenVPN credentials not set. Exiting."
- exit 1
-else
-  echo "Setting OPENVPN credentials..."
-  mkdir -p /config
-  echo $OPENVPN_USERNAME > /config/openvpn-credentials.txt
-  echo $OPENVPN_PASSWORD >> /config/openvpn-credentials.txt
-  chmod 600 /config/openvpn-credentials.txt
-fi
-
 if [ -n "${LOCAL_NETWORK-}" ]; then
   eval $(/sbin/ip r l m 0.0.0.0 | awk '{if($5!="tun0"){print "GW="$3"\nINT="$5; exit}}')
   if [ -n "${GW-}" -a -n "${INT-}" ]; then
